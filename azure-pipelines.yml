@@ -7,14 +7,16 @@ trigger:
 - master
 
 jobs:
+- job: RunsOnServer
+  pool: Server
+  steps:
+  - task: Delay@1
+    inputs:
+      delayForMinutes: '1' 
 - job: Linux
   pool:
     vmImage: 'Ubuntu 16.04'
   steps:
-  - task: Delay@1
-    displayName: 'Delay by 5 minutes'
-    inputs:
-      delayForMinutes: 5
   - task: DotNetCoreInstaller@0
     inputs:
       packageType: 'sdk'
@@ -29,7 +31,6 @@ jobs:
     inputs:
       testResultsFormat: VSTest
       testResultsFiles: '**/*.trx' 
-
 - job: macOS
   pool:
     vmImage: 'macOS-10.13'
