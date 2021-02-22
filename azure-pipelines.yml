@@ -42,11 +42,14 @@ jobs:
     inputs:
       testResultsFormat: VSTest
       testResultsFiles: '**/*.trx'
-  - task: PublishPipelineArtifact@1
+  - task: UniversalPackages@0
+    displayName: Universal Publish
     inputs:
-      targetPath: $(System.DefaultWorkingDirectory)/bin/WebApp
-      artifactName: WebApp
-
+      command: publish
+      publishDirectory: '$(Build.ArtifactStagingDirectory)'
+      vstsFeedPublish: 'Test Project 2/TestFeedPipeline'
+      vstsFeedPackagePublish: '$(Build.BuildNumber)'
+      packagePublishDescription: '$(Build.BuildNumber)'
       
 #- job: macOS
 #  pool:
