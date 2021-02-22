@@ -3,6 +3,8 @@
 # Add steps that run tests, create a NuGet package, deploy, and more:
 # https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
 
+name: $(TeamProject)_$(Build.DefinitionName)_$(SourceBranchName)_$(Date:yyyyMMdd)$(Rev:.r)
+
 trigger:
 - master
 
@@ -17,20 +19,15 @@ jobs:
 - job: RunsOnServer
   pool: Server
   steps:
+  - script: echo '$(Build.BuildNumber)'
   - task: Delay@1
     inputs:
       delayForMinutes: '1'
-  - task: PowerShell@2
-    inputs:
-      targetType: 'inline'
-      script: |
-        [string]$version="$(Build.Repository.Name)_SomeCustomData_$(Build.BuildId)"
-        Write-Output "##vso[build.updatebuildnumber]$(Version)"
-    displayName: 'Set build version'  
 - job: Linux
   pool:
     vmImage: 'Ubuntu 16.04'
   steps:
+  - script: echo '$(Build.BuildNumber)'
   - task: DotNetCoreInstaller@0
     inputs:
       packageType: 'sdk'
@@ -69,6 +66,7 @@ jobs:
   pool:
     vmImage: 'windows-2019'
   steps:
+  - script: echo '$(Build.BuildNumber)'
   - task: DotNetCoreInstaller@0
     inputs:
       packageType: 'sdk'
