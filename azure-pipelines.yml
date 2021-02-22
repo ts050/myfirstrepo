@@ -21,7 +21,7 @@ jobs:
   steps:
   - task: Delay@1
     inputs:
-      delayForMinutes: '1'
+      delayForMinutes: '0'
 
 - job: Linux
   pool:
@@ -70,27 +70,27 @@ jobs:
 #      testResultsFormat: VSTest
 #      testResultsFiles: '**/*.trx' 
 
-- job: Windows
-  pool:
-    vmImage: 'windows-2019'
-  steps:
-  - script: echo '$(Build.BuildNumber)'
-  - task: DotNetCoreInstaller@0
-    inputs:
-      packageType: 'sdk'
-      version: '2.2.401'
-  - script: dotnet build ./SimplCommerce.sln
-    displayName: 'dotnet build'
-  - task: PowerShell@2
-    inputs:
-      filePath: .\run-tests.ps1
-    displayName: 'run tests'
-  - task: PublishTestResults@2
-    displayName: 'Publish Test Results **/*.trx'
-    condition: succeededOrFailed()
-    inputs:
-      testResultsFormat: VSTest
-      testResultsFiles: '**/*.trx' 
+#- job: Windows
+#  pool:
+#    vmImage: 'windows-2019'
+#  steps:
+#  - script: echo '$(Build.BuildNumber)'
+#  - task: DotNetCoreInstaller@0
+#    inputs:
+#      packageType: 'sdk'
+#      version: '2.2.401'
+#  - script: dotnet build ./SimplCommerce.sln
+#    displayName: 'dotnet build'
+#  - task: PowerShell@2
+#    inputs:
+#      filePath: .\run-tests.ps1
+#    displayName: 'run tests'
+#  - task: PublishTestResults@2
+#    displayName: 'Publish Test Results **/*.trx'
+#    condition: succeededOrFailed()
+#    inputs:
+#      testResultsFormat: VSTest
+#      testResultsFiles: '**/*.trx' 
 
 #- job: LinuxRelease
 #  pool:
