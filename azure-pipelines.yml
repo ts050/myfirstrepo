@@ -19,10 +19,10 @@ jobs:
 - job: RunsOnServer
   pool: Server
   steps:
-  - script: echo '$(Build.BuildNumber)'
   - task: Delay@1
     inputs:
       delayForMinutes: '1'
+
 - job: Linux
   pool:
     vmImage: 'Ubuntu 16.04'
