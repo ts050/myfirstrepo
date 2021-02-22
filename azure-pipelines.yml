@@ -11,6 +11,10 @@ jobs:
   pool:
     vmImage: 'Ubuntu 16.04'
   steps:
+  - task: Delay@1
+    displayName: 'Delay by 5 minutes'
+    inputs:
+      delayForMinutes: 5
   - task: DotNetCoreInstaller@0
     inputs:
       packageType: 'sdk'
