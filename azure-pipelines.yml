@@ -26,6 +26,7 @@ jobs:
       script: |
         [string]$version="$(Build.Repository.Name)_SomeCustomData_$(Build.BuildId)"
         Write-Output "##vso[build.updatebuildnumber]$(Version)"
+    displayName: 'Set build version'  
 - job: Linux
   pool:
     vmImage: 'Ubuntu 16.04'
