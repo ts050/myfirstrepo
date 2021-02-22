@@ -42,6 +42,11 @@ jobs:
     inputs:
       testResultsFormat: VSTest
       testResultsFiles: '**/*.trx'
+  - task: PublishPipelineArtifact@1
+    inputs:
+      targetPath: $(System.DefaultWorkingDirectory)/bin/WebApp
+      artifactName: WebApp
+
       
 #- job: macOS
 #  pool:
