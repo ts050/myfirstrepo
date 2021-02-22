@@ -25,7 +25,9 @@ jobs:
 
 - job: Linux
   pool:
-    vmImage: 'Ubuntu 16.04'
+    name: Default
+  # pool:
+  #  vmImage: 'Ubuntu 16.04'
   steps:
   - script: echo '$(Build.BuildNumber)'
   - task: DotNetCoreInstaller@0
