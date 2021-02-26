@@ -12,7 +12,8 @@ schedules:
 - cron: "0,30 * * * *"
   displayName: Every 30 mins
   branches:
-    include:
+    include: 
+    - master
 
 stages:
 - stage: Build
