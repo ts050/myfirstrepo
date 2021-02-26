@@ -13,45 +13,46 @@ schedules:
   displayName: Every 30 mins
   branches:
     include:
-    - master
 
-jobs:
-- job: RunsOnServer
-  pool: Server
-  steps:
-  - task: Delay@1
-    inputs:
-      delayForMinutes: '0'
+stages:
+- stage: Build
+  jobs:
+  - job: RunsOnServer
+    pool: Server
+    steps:
+    - task: Delay@1
+      inputs:
+        delayForMinutes: '0'
 
-- job: Linux
-  pool:
-    name: Default
-  # pool:
-  #  vmImage: 'Ubuntu 16.04'
-  steps:
-  - script: echo '$(Build.BuildNumber)'
-  - task: DotNetCoreInstaller@0
-    inputs:
-      packageType: 'sdk'
-      version: '2.2.401'
-  - script: dotnet build ./SimplCommerce.sln
-    displayName: 'dotnet build'
-  - script: ./run-tests.sh
-    displayName: 'run tests'
-  - task: PublishTestResults@2
-    displayName: 'Publish Test Results **/*.trx'
-    condition: succeededOrFailed()
-    inputs:
-      testResultsFormat: VSTest
-      testResultsFiles: '**/*.trx'
-  - task: UniversalPackages@0
-    displayName: Universal Publish
-    inputs:
-      command: publish
-      publishDirectory: '$(Build.ArtifactStagingDirectory)'
-      vstsFeedPublish: 'Test Project 2/TestFeedPipeline'
-      vstsFeedPackagePublish: '$(Build.BuildNumber)'
-      packagePublishDescription: '$(Build.BuildNumber)'
+  - job: Linux
+    pool:
+      name: Default
+    # pool:
+    #  vmImage: 'Ubuntu 16.04'
+    steps:
+    - script: echo '$(Build.BuildNumber)'
+    - task: DotNetCoreInstaller@0
+      inputs:
+        packageType: 'sdk'
+        version: '2.2.401'
+    - script: dotnet build ./SimplCommerce.sln
+      displayName: 'dotnet build'
+    - script: ./run-tests.sh
+      displayName: 'run tests'
+    - task: PublishTestResults@2
+      displayName: 'Publish Test Results **/*.trx'
+      condition: succeededOrFailed()
+      inputs:
+        testResultsFormat: VSTest
+        testResultsFiles: '**/*.trx'
+    - task: UniversalPackages@0
+      displayName: Universal Publish
+      inputs:
+        command: publish
+        publishDirectory: '$(Build.ArtifactStagingDirectory)'
+        vstsFeedPublish: 'Test Project 2/TestFeedPipeline'
+        vstsFeedPackagePublish: '$(Build.BuildNumber)'
+        packagePublishDescription: '$(Build.BuildNumber)'
       
 #- job: macOS
 #  pool:
@@ -113,3 +114,14 @@ jobs:
 #    condition: succeededOrFailed()
 #    inputs:
 #      testResultsFormat: VSTest
+
+- stage: deploy
+  jobs:
+  - deployment: TestDeployment
+    displayName: Test Deployment
+    environment: 'QA'
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - script: ls
